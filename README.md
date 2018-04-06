@@ -1,9 +1,9 @@
 # naming
 ${environment}-${service}-${role}-${number}
-e.g. prod-kepter-front-1 
+e.g. prod-kepter-front-1
 
 | tag | sample |
-|-----|
+|-----| ---- |
 | environment | prod, stage, dev |
 | service | kpter |
 | role | front, admin, rdb,... |
