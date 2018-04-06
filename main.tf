@@ -6,11 +6,26 @@ provider "aws" {
 }
 
 module "ec2" {
-  source = "./modules/compute"
+  source = "./modules/ec2"
+
   environment = "${ var.environment }"
   ami = "${ var.ami }"
   ec2_front {
     instance_type =  "${ var.ec2_front["instance_type"] }"
     count = "${ var.ec2_front["count"] }"
   }
+}
+
+module "acm" {
+  source = "./modules/acm"
+
+  environment = "${ var.environment }"
+  domain = "${ var.domain }"
+}
+
+module "s3" {
+  source = "./modules/s3"
+
+  environment = "${ var.environment }"
+  domain = "${ var.domain }"
 }

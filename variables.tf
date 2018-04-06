@@ -1,13 +1,18 @@
 variable access_key {}
 variable secret_key {}
 
-# prod, stage, dev. recieve from terraform -var="environment=xxx"
+# general variables
 variable "environment" {}
 
 variable region {
   default = "ap-northeast-1"
 }
 
+variable domain {
+  default = "kpter.net"
+}
+
+# ec2 variables
 variable ami {}
 variable ec2_front {
   type = "map"
