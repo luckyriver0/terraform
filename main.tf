@@ -1,7 +1,14 @@
 provider "google" {
-  # credentials = "${file("/path/to/account.json")}"    # refer to environment variables
+  # credentials = "${file("/path/to/account.json")}"  # refer to environment variables
   project = "${var.project}"
   region = "${var.region}"
+}
+
+terraform {
+  backend "gcs" {
+    bucket  = ""  # refer to args -backend-config
+    prefix  = ""  # refer to args -backend-config
+  }
 }
 
 module "kpter-infrastructure" {
