@@ -13,3 +13,4 @@ variable cloud_storage_image_store {
 variable cloud_sql_master {
   type = "map"
 }
+variable domain {}

@@ -20,6 +20,7 @@ module "kpter-infrastructure" {
   project = "${var.project}"
   region = "${var.region}"
   zone = "${var.zone}"
+  domain = "${var.domain}"
 
   compute_engine_front {
     machine_type = "${var.compute_engine_front["machine_type"]}"
