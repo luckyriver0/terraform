@@ -1,0 +1,39 @@
+version: 2
+jobs:
+  plan:
+    docker:
+      - image: hashicorp/terraform:0.11.7
+    working_directory: ~/cci-terraform
+    steps:
+      - checkout
+      - run:
+          name: plan
+          command: |
+            echo $GCLOUD_SERVICE_KEY | base64 -d > ~/gcloud-service-key.json
+            export GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
+            terraform init -backend-config="bucket=kpter-tfstat" -backend-config="prefix=prod"
+            terraform plan -var-file="prod.tfvars"
+  apply:
+    docker:
+      - image: hashicorp/terraform:0.11.7
+    working_directory: ~/cci-terraform
+    steps:
+      - checkout
+      - run:
+          name: apply
+          command: |
+            echo $GCLOUD_SERVICE_KEY | base64 -d > ~/gcloud-service-key.json
+            export GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
+            terraform init -backend-config="bucket=kpter-tfstat" -backend-config="prefix=prod"
+            terraform apply -var-file="prod.tfvars" -auto-approve
+workflows:
+  version: 2
+  plan-and-apply:
+    jobs:
+      - plan
+      - apply:
+          requires:
+            - plan
+          filters:
+            branches:
+              only: master

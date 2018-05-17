@@ -1,31 +1,41 @@
-provider "aws" {
-  # XXX Provisionally pass arguments.Eventually set as environment variable
-  access_key = "${ var.access_key }"
-  secret_key = "${ var.secret_key }"
-  region = "${ var.region }"
+provider "google" {
+  # credentials = "${file("/path/to/account.json")}"  # refer to environment variables
+  project = "${var.project}"
+  region = "${var.region}"
 }
 
-module "ec2" {
-  source = "./modules/ec2"
-
-  environment = "${ var.environment }"
-  ami = "${ var.ami }"
-  ec2_front {
-    instance_type =  "${ var.ec2_front["instance_type"] }"
-    count = "${ var.ec2_front["count"] }"
+terraform {
+  backend "gcs" {
+    bucket  = ""  # refer to args -backend-config
+    prefix  = ""  # refer to args -backend-config
   }
 }
 
-module "acm" {
-  source = "./modules/acm"
+module "kpter-infrastructure" {
+  source = "./modules/gcp"
 
-  environment = "${ var.environment }"
-  domain = "${ var.domain }"
-}
+  service_name = "${var.service_name}"
+  environment = "${var.environment}"
+  env_prefix = "${var.env_prefix}"
+  project = "${var.project}"
+  region = "${var.region}"
+  zone = "${var.zone}"
+  domain = "${var.domain}"
 
-module "s3" {
-  source = "./modules/s3"
+  compute_engine_front {
+    machine_type = "${var.compute_engine_front["machine_type"]}"
+    image = "${var.compute_engine_front["image"]}"
+  }
 
-  environment = "${ var.environment }"
-  domain = "${ var.domain }"
+  cloud_storage_image_store {
+    location = "${var.cloud_storage_image_store["location"]}"
+    storage_class = "${var.cloud_storage_image_store["storage_class"]}"
+  }
+
+  cloud_sql_master {
+    tier = "${var.cloud_sql_master["tier"]}"
+    database_version = "${var.cloud_sql_master["database_version"]}"
+    root_user = "${var.cloud_sql_master["root_user"]}"    # refer to environment variables
+    root_password = "${var.cloud_sql_master["root_password"]}"    # refer to environment variables
+  }
 }
