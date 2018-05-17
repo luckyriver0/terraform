@@ -1,6 +1,6 @@
 resource "google_compute_address" "front" {
   name = "${var.env_prefix}-${var.service_name}-front"
-  region       = "${var.region}"
+  region = "${var.region}"
 }
 
 resource "google_compute_instance" "front" {
@@ -18,7 +18,7 @@ resource "google_compute_instance" "front" {
   network_interface {
     subnetwork = "${google_compute_subnetwork.subnet1.name}"
     access_config {
-      nat_ip   = "${google_compute_address.front.address}"
+      nat_ip = "${google_compute_address.front.address}"
     }
   }
 }

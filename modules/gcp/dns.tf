@@ -5,7 +5,7 @@ resource "google_dns_managed_zone" "prod" {
 }
 
 resource "google_dns_record_set" "front" {
-  name = "front.${google_dns_managed_zone.prod.dns_name}"
+  name = "${google_dns_managed_zone.prod.dns_name}"
   type = "A"
   ttl  = 300
 
